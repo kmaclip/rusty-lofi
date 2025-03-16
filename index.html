@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lo-Fi Wave Visualizer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #2a1b3d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        canvas {
+            border: 1px solid #fff;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="waveCanvas" width="800" height="400"></canvas>
+    <script type="module">
+        import init, { LoFiPlayer } from './pkg/rusty_lofi.js';
+
+        async function run() {
+            await init();
+            const player = new LoFiPlayer();
+            const canvas = document.getElementById('waveCanvas');
+            const ctx = canvas.getContext('2d');
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const samples = new Array(width).fill(height / 2);
+            let index = 0;
+
+            function draw() {
+                const sample = player.get_sample();
+                if (sample !== null) {
+                    const value = sample;
+                    samples[index] = value * height / 2 + height / 2;
+                    index = (index + 1) % width;
+                }
+
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = '#2a1b3d';
+                ctx.fillRect(0, 0, width, height);
+                ctx.beginPath();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                for (let i = 0; i < width - 1; i++) {
+                    const x0 = i;
+                    const y0 = samples[(index + i) % width];
+                    const x1 = i + 1;
+                    const y1 = samples[(index + i + 1) % width];
+                    ctx.moveTo(x0, y0);
+                    ctx.lineTo(x1, y1);
+                    ctx.stroke();
+                    ctx.fillStyle = '#fff';
+                    ctx.beginPath();
+                    ctx.arc(x0, y0, 1, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                requestAnimationFrame(draw);
+            }
+
+            draw();
+        }
+
+        run().catch(console.error);
+    </script>
+</body>
+</html>

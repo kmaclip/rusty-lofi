@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rusty Lo-Fi</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #2a1b3d;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        canvas {
+            border: 1px solid #fff;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #fff;
+            color: #2a1b3d;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="waveCanvas" width="800" height="400"></canvas>
+    <button id="playButton">Play</button>
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
